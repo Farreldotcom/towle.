@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
+import Providers from '@/components/Providers';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -40,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable} scroll-smooth`}>
       <body className="bg-surface text-on-surface antialiased font-body-md selection:bg-secondary-container selection:text-on-secondary-container min-h-screen">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

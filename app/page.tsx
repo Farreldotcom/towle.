@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useStore } from '@/contexts/StoreContext';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -20,15 +21,14 @@ import SearchModal from '@/components/SearchModal';
 import InfoModal from '@/components/InfoModal';
 
 export default function Home() {
-  const [isRentalDrawerOpen, setIsRentalDrawerOpen] = useState(false);
+  const { setIsCartOpen } = useStore();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [infoModalType, setInfoModalType] = useState<'terms' | 'privacy' | 'sustainability' | null>(null);
-  const [cartCount, setCartCount] = useState(0);
   const [preselectedLocation, setPreselectedLocation] = useState('CANGGU');
 
   const handleOpenRental = (location = 'CANGGU') => {
     setPreselectedLocation(location);
-    setIsRentalDrawerOpen(true);
+    setIsCartOpen(true);
   };
 
   const handleSelectSearchResult = (targetId: string) => {
@@ -38,21 +38,13 @@ export default function Home() {
     }
   };
 
-  const handleOrderComplete = (count: number) => {
-    setCartCount((prev) => prev + count);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-surface text-on-surface">
       {/* 01: Announcement Bar */}
       <AnnouncementBar />
 
       {/* 02: Sticky Top Navigation */}
-      <Navbar
-        onOpenCart={() => handleOpenRental(preselectedLocation)}
-        onOpenSearch={() => setIsSearchOpen(true)}
-        cartCount={cartCount}
-      />
+      <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
 
       {/* Main Page Flow */}
       <main className="flex-1">
@@ -97,12 +89,7 @@ export default function Home() {
       />
 
       {/* Slide-over Rental & Booking Drawer */}
-      <RentalDrawer
-        isOpen={isRentalDrawerOpen}
-        onClose={() => setIsRentalDrawerOpen(false)}
-        initialLocation={preselectedLocation}
-        onOrderComplete={handleOrderComplete}
-      />
+      <RentalDrawer initialLocation={preselectedLocation} />
 
       {/* Search Modal */}
       <SearchModal

@@ -1,50 +1,62 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, ShoppingBag, Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { Search, ShoppingBag, Menu, X, User, ShieldCheck, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useStore } from '@/contexts/StoreContext';
 
 interface NavbarProps {
-  onOpenCart: () => void;
-  onOpenSearch: () => void;
-  cartCount: number;
+  onOpenSearch?: () => void;
 }
 
-export default function Navbar({ onOpenCart, onOpenSearch, cartCount }: NavbarProps) {
+export default function Navbar({ onOpenSearch }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, profile, isAdmin, logout } = useAuth();
+  const { cartCount, setIsCartOpen } = useStore();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const scrollTo = (id: string) => {
+  const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
-    const elem = document.querySelector(id);
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
+    if (href.startsWith('#')) {
+      if (pathname === '/') {
+        const elem = document.querySelector(href);
+        if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        router.push('/' + href);
+      }
+    } else {
+      router.push(href);
     }
   };
 
   return (
-    <header className="sticky top-0 w-full z-40 bg-surface/85 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_16px_40px_-12px_rgba(29,29,26,0.06)] transition-all duration-300 ease-out">
+    <header className="sticky top-0 w-full z-40 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_16px_40px_-12px_rgba(29,29,26,0.06)] transition-all duration-300 ease-out">
       <div className="grid grid-cols-3 items-center w-full px-5 md:px-10 lg:px-16 h-20 max-w-[1440px] mx-auto">
         {/* Left: Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <button
-            onClick={() => scrollTo('#product')}
-            className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer"
+        <nav className="hidden md:flex items-center space-x-7">
+          <Link
+            href="/products"
+            className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200"
           >
-            SHOP
-          </button>
+            CATALOG
+          </Link>
           <button
-            onClick={() => scrollTo('#how-it-works')}
+            onClick={() => handleNavClick('#how-it-works')}
             className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer"
           >
             HOW IT WORKS
           </button>
           <button
-            onClick={() => scrollTo('#locations')}
+            onClick={() => handleNavClick('#locations')}
             className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer"
           >
             LOCATIONS
           </button>
           <button
-            onClick={() => scrollTo('#faq')}
+            onClick={() => handleNavClick('#faq')}
             className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer"
           >
             FAQ
@@ -65,27 +77,69 @@ export default function Navbar({ onOpenCart, onOpenSearch, cartCount }: NavbarPr
 
         {/* Center: Brand Logo */}
         <div className="text-center">
-          <a
+          <Link
             className="font-headline-lg text-headline-lg tracking-tight uppercase text-primary font-normal inline-block hover:opacity-90 transition-opacity"
-            href="#"
+            href="/"
           >
             TOWLE.
-          </a>
+          </Link>
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center justify-end space-x-6">
-          <button
-            aria-label="Search"
-            onClick={onOpenSearch}
-            className="text-primary hover:text-secondary transition-colors duration-200 flex items-center p-1 cursor-pointer"
-            type="button"
-          >
-            <Search className="w-5 h-5 stroke-[1.5]" />
-          </button>
+        <div className="flex items-center justify-end space-x-5 lg:space-x-6">
+          {onOpenSearch && (
+            <button
+              aria-label="Search"
+              onClick={onOpenSearch}
+              className="text-primary hover:text-secondary transition-colors duration-200 flex items-center p-1 cursor-pointer"
+              type="button"
+            >
+              <Search className="w-5 h-5 stroke-[1.5]" />
+            </button>
+          )}
+
+          {/* User Account / Admin Badge */}
+          {user ? (
+            <div className="flex items-center space-x-3">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 bg-secondary-container text-on-secondary-container font-label-caps-sm text-[10px] tracking-wider border border-secondary/30"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  ADMIN
+                </Link>
+              )}
+              <Link
+                href="/account"
+                aria-label="Account"
+                className="text-primary hover:text-secondary transition-colors duration-200 flex items-center p-1"
+                title={profile?.displayName || 'My Account'}
+              >
+                <User className="w-5 h-5 stroke-[1.5]" />
+              </Link>
+              <button
+                onClick={() => logout()}
+                aria-label="Log Out"
+                title="Log Out"
+                className="text-on-surface-variant hover:text-error transition-colors p-1"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="font-label-caps-lg text-label-caps-lg text-on-surface-variant hover:text-primary transition-colors duration-200"
+            >
+              SIGN IN
+            </Link>
+          )}
+
+          {/* Shopping Bag */}
           <button
             aria-label="Shopping Bag"
-            onClick={onOpenCart}
+            onClick={() => setIsCartOpen(true)}
             className="text-primary hover:text-secondary transition-colors duration-200 flex items-center relative p-1 cursor-pointer"
             type="button"
           >
@@ -94,8 +148,10 @@ export default function Navbar({ onOpenCart, onOpenSearch, cartCount }: NavbarPr
               {cartCount}
             </span>
           </button>
+
+          {/* Primary Action Button */}
           <button
-            onClick={onOpenCart}
+            onClick={() => setIsCartOpen(true)}
             className="hidden sm:inline-block font-label-caps-lg text-label-caps-lg px-5 py-2.5 bg-primary-container text-surface hover:bg-on-surface-variant transition-colors duration-200 cursor-pointer tracking-widest"
             type="button"
           >
@@ -108,35 +164,75 @@ export default function Navbar({ onOpenCart, onOpenSearch, cartCount }: NavbarPr
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-outline-variant/30 bg-surface px-6 py-6 space-y-4 animate-in fade-in duration-200">
           <div className="flex flex-col space-y-3 font-label-caps-lg">
-            <button
-              onClick={() => scrollTo('#product')}
+            <Link
+              href="/products"
+              onClick={() => setMobileMenuOpen(false)}
               className="text-left py-2 text-on-surface-variant hover:text-primary transition-colors"
             >
-              SHOP
-            </button>
+              CATALOG
+            </Link>
             <button
-              onClick={() => scrollTo('#how-it-works')}
+              onClick={() => handleNavClick('#how-it-works')}
               className="text-left py-2 text-on-surface-variant hover:text-primary transition-colors"
             >
               HOW IT WORKS
             </button>
             <button
-              onClick={() => scrollTo('#locations')}
+              onClick={() => handleNavClick('#locations')}
               className="text-left py-2 text-on-surface-variant hover:text-primary transition-colors"
             >
               LOCATIONS
             </button>
             <button
-              onClick={() => scrollTo('#faq')}
+              onClick={() => handleNavClick('#faq')}
               className="text-left py-2 text-on-surface-variant hover:text-primary transition-colors"
             >
               FAQ
             </button>
+
+            {user ? (
+              <>
+                <Link
+                  href="/account"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-left py-2 text-primary font-semibold border-t border-outline-variant/20 pt-3"
+                >
+                  MY ACCOUNT ({profile?.displayName || 'User'})
+                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-left py-2 text-secondary font-semibold"
+                  >
+                    ADMIN DASHBOARD
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }}
+                  className="text-left py-2 text-error"
+                >
+                  SIGN OUT
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-left py-2 text-primary font-semibold border-t border-outline-variant/20 pt-3"
+              >
+                SIGN IN / REGISTER
+              </Link>
+            )}
+
             <div className="pt-2">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  onOpenCart();
+                  setIsCartOpen(true);
                 }}
                 className="w-full py-3 bg-primary-container text-surface font-label-caps-lg text-center tracking-widest"
               >

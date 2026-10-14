@@ -1,0 +1,257 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered customer or administrator profile in TOWLE.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full name of the user."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["customer", "admin"],
+          "description": "RBAC role of the user."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "WhatsApp or phone number."
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Default villa or hotel address in Bali."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of user creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update."
+        }
+      },
+      "required": ["id", "email", "displayName", "role"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Designated administrator record for privileged access.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Admin UID."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Admin email address."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin"],
+          "description": "Administrator role."
+        },
+        "addedAt": {
+          "type": "string",
+          "description": "Timestamp when admin status was granted."
+        }
+      },
+      "required": ["id", "email", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "TOWLE beach item or rental package available in the dynamic catalog.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique product identifier."
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 150,
+          "description": "Product display name."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Detailed description of the item."
+        },
+        "price": {
+          "type": "number",
+          "description": "Rental price or item cost in IDR."
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Category such as Towel, Pillow, or Set."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Product image URL."
+        },
+        "material": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Textile fabric specification."
+        },
+        "dimensions": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Size dimensions."
+        },
+        "color": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Colorway identifier."
+        },
+        "stock": {
+          "type": "number",
+          "description": "Available rental stock."
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Whether the product is published."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp."
+        }
+      },
+      "required": ["id", "name", "price", "category", "stock", "isActive"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Rental booking transaction placed by a customer or admin.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique order document identifier."
+        },
+        "orderNumber": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Human-readable order pass number."
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the customer who placed the order."
+        },
+        "guestName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Customer full name."
+        },
+        "guestEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Customer contact email."
+        },
+        "guestPhone": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Customer WhatsApp contact."
+        },
+        "items": {
+          "type": "array",
+          "description": "List of products rented in this order."
+        },
+        "deliveryType": {
+          "type": "string",
+          "enum": ["kiosk", "villa"],
+          "description": "Delivery method."
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Designated Bali beach destination."
+        },
+        "villaAddress": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Villa or hotel address for drop-off."
+        },
+        "rentalDate": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Date or period of the beach rental."
+        },
+        "subtotal": {
+          "type": "number",
+          "description": "Subtotal amount in IDR."
+        },
+        "deliveryFee": {
+          "type": "number",
+          "description": "Delivery fee in IDR."
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total order price in IDR."
+        },
+        "orderStatus": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "active", "returned", "cancelled"],
+          "description": "Current fulfillment status."
+        },
+        "paymentStatus": {
+          "type": "string",
+          "enum": ["unpaid", "paid", "pending_verification"],
+          "description": "Payment settlement status."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Order creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Order update timestamp."
+        }
+      },
+      "required": ["id", "orderNumber", "userId", "guestName", "items", "deliveryType", "location", "totalAmount", "orderStatus", "paymentStatus"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "User profile records containing account data and RBAC role."
+    },
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/Admin"
+      },
+      "description": "Verified administrators list for RBAC verification."
+    },
+    "/products/{productId}": {
+      "schema": {
+        "$ref": "#/entities/Product"
+      },
+      "description": "Public towel products and rental items catalog."
+    },
+    "/orders/{orderId}": {
+      "schema": {
+        "$ref": "#/entities/Order"
+      },
+      "description": "Rental orders placed by customers, manageable by admins."
+    }
+  }
+}
