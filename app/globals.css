@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #fbf9f3;
+  --color-surface-dim: #dcdad4;
+  --color-surface-bright: #fbf9f3;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f3ed;
+  --color-surface-container: #f0eee8;
+  --color-surface-container-high: #eae8e2;
+  --color-surface-container-highest: #e4e2dd;
+  --color-on-surface: #1b1c18;
+  --color-on-surface-variant: #474741;
+  --color-inverse-surface: #30312d;
+  --color-inverse-on-surface: #f3f1eb;
+  --color-outline: #787770;
+  --color-outline-variant: #c8c7be;
+  --color-surface-tint: #5f5e5a;
+  --color-primary: #020302;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1d1d1a;
+  --color-on-primary-container: #868580;
+  --color-inverse-primary: #c9c6c1;
+  --color-secondary: #456369;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #c5e5ed;
+  --color-on-secondary-container: #4a676e;
+  --color-secondary-fixed: #c8e8ef;
+  --color-secondary-fixed-dim: #acccd3;
+  --color-tertiary: #000200;
+  --color-surface-variant: #e4e2dd;
+
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Custom Typography Utility Classes matching exact design specs */
+.font-display-xl {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 4.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.font-display-xl-mobile {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 2.75rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.font-display-lg {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 3.25rem;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+
+.font-display-lg-mobile {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.font-headline-lg {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.font-headline-md {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 1.75rem;
+  line-height: 1.3;
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+
+.font-headline-sm {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+
+.font-body-lg {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+.font-body-md {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+}
+
+.font-body-sm {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+}
+
+.font-label-caps-lg {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.font-label-caps-sm {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.font-label-regular {
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.28;
+  }
+  50% {
+    transform: scale(0.92);
+    opacity: 0.18;
+  }
+}
+
+.animate-shadow-pulse {
+  animation: shadowPulse 6s ease-in-out infinite;
+}
+
+/* Base resets */
+html {
+  scroll-behavior: smooth;
+  background-color: #fbf9f3;
+  color: #1b1c18;
+}
+
+::selection {
+  background-color: #c5e5ed;
+  color: #4a676e;
+}

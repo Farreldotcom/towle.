@@ -1,0 +1,6 @@
+{
+  "name": "TOWLE. — Beach Towel Rental",
+  "description": "Make Your Beach Day Better. A multifunctional beach towel rental service designed for comfort, convenience, and slow coastal living in Bali.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
